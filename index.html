@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Club Form Maker</title>
 
+<!-- KEY LOGIC -->
 <script src="key.js" defer></script>
 
 <style>
@@ -116,18 +117,13 @@ button{
     <h2>Club Form Maker</h2>
 
     <p>
-      Welcome to <strong>Club Form Maker</strong>.  
-      Generate professional application forms with controlled access.
+      Generate professional club application forms
+      with controlled access.
     </p>
 
     <p>
-      Complete payment and contact the owner to receive your
-      <strong>access key</strong>.
-    </p>
-
-    <p style="font-size:13px;">
-      Once a key is entered, you have <strong>60 seconds</strong> to generate.
-      Output is open-source. Payments are final.
+      Complete payment and contact the owner to receive
+      your <strong>access key</strong>.
     </p>
 
     <div class="socials">
@@ -143,9 +139,9 @@ button{
     </div>
   </div>
 
-  <!-- KEY -->
+  <!-- ACCESS KEY -->
   <div class="card">
-    <h3>🔐 Access Key Verification</h3>
+    <h3>🔐 Access Key</h3>
 
     <input id="accessKey" placeholder="Enter your access key">
     <button onclick="checkKey()">Verify Access</button>
@@ -153,17 +149,16 @@ button{
     <div id="status"></div>
   </div>
 
-  <!-- FORM MAKER -->
+  <!-- FORM GENERATOR -->
   <div class="card" id="formMaker">
     <h3>🛠 Form Generator</h3>
 
-    <textarea id="templateBox" rows="10" readonly
-      placeholder="Template will load after key verification..."></textarea>
+    <!-- Generate  -->
+    <button onclick="generateForm()">Generate Form</button>
 
-    <button onclick="generateForm()">Generate</button>
-
+    <!-- OUTPUT -->
     <div id="output">
-      <textarea id="outputCode" rows="10" readonly></textarea>
+      <textarea id="outputCode" rows="14" readonly></textarea>
       <button onclick="copyLink()">Copy Code</button>
     </div>
   </div>
@@ -171,32 +166,30 @@ button{
 </div>
 
 <script>
-async function loadTemplate(){
-  try{
-    const res = await fetch("./template.html",{cache:"no-store"});
-    document.getElementById("templateBox").value = await res.text();
-  }catch{
-    document.getElementById("templateBox").value =
-      "ERROR: template.html not found.\nUse localhost or hosting.";
+let TEMPLATE_SOURCE = "";
+
+
+async function generateForm(){
+  if(!TEMPLATE_SOURCE){
+    try{
+      const res = await fetch("./template.html",{cache:"no-store"});
+      if(!res.ok) throw new Error();
+      TEMPLATE_SOURCE = await res.text();
+    }catch{
+      alert("template.html not found.");
+      return;
+    }
   }
+
+  document.getElementById("outputCode").value = TEMPLATE_SOURCE;
+  document.getElementById("output").style.display = "block";
 }
 
-(function watchFormMaker(){
-  const fm = document.getElementById("formMaker");
-  new MutationObserver(()=>{
-    if(getComputedStyle(fm).display!=="none") loadTemplate();
-  }).observe(fm,{attributes:true});
-})();
-
-function generateForm(){
-  const src = templateBox.value.trim();
-  if(!src) return alert("Template not loaded.");
-  outputCode.value = src;
-  output.style.display = "block";
-}
 
 function copyLink(){
-  outputCode.select();
+  const ta = document.getElementById("outputCode");
+  ta.select();
+  ta.setSelectionRange(0,999999);
   document.execCommand("copy");
   alert("Source code copied.");
 }
