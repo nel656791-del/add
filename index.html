@@ -2,70 +2,219 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Club Form Generator</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Club Form Maker</title>
+
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+
+
+<script src="key.js" defer></script>
 
 <style>
+:root{
+  --bg:#0b0f1a;
+  --card:#12172a;
+  --border:#1f2a4a;
+  --text:#eaf0ff;
+  --muted:#9aa4c7;
+  --accent:#6ea8ff;
+  --accent2:#9b7bff;
+  --success:#38d39f;
+  --danger:#ff5c7a;
+}
+*{box-sizing:border-box}
+
 body{
-  background:#050b18;
-  color:#0ff;
-  font-family:monospace;
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  background:linear-gradient(180deg,#0b0f1a,#0f1530);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
   padding:20px;
 }
-input,button,textarea{
+
+.container{
+  max-width:1000px;
   width:100%;
-  padding:10px;
-  margin-bottom:10px;
-  background:#000;
-  color:#0ff;
-  border:1px solid #0ff;
+  display:grid;
+  gap:20px;
 }
-textarea{height:280px;}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:24px;
+}
+
+
+h2,h3{margin-top:0}
+p{
+  font-size:14px;
+  line-height:1.6;
+  color:var(--muted);
+}
+
+
+input,button{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:#0d1326;
+  color:var(--text);
+  font-size:14px;
+}
+button{
+  margin-top:12px;
+  cursor:pointer;
+  font-weight:600;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#0b0f1a;
+}
+
+
+.socials{
+  display:flex;
+  gap:16px;
+  margin-top:14px;
+}
+.socials a{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:12px 16px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:#0d1326;
+  text-decoration:none;
+  color:var(--text);
+  font-size:14px;
+}
+.socials a:hover{
+  border-color:var(--accent);
+}
+.socials img{
+  width:22px;
+  height:22px;
+  display:block;
+  object-fit:contain;
+  filter:none;
+}
+
+.socials a:hover img{
+  transform:scale(1.05);
+}
+
+#status{
+  margin-top:10px;
+  font-size:13px;
+}
+#timer{
+  font-size:13px;
+  color:var(--muted);
+}
+
+#formMaker{display:none}
 </style>
+
+<script>
+
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+</script>
 </head>
 
 <body>
+<div class="container">
 
-<h2>Club Form Generator</h2>
+  
+  <div class="card">
+    <h2>Club Form Maker</h2>
 
-<input id="club" placeholder="CLUB NAME">
-<input id="fb" placeholder="Facebook Link">
-<input id="ig" placeholder="Instagram Link">
-<input id="tg" placeholder="Telegram Link">
-<input id="tt" placeholder="TikTok Link">
+    <p>
+  Welcome to <strong>Club Form Maker</strong>.  
+  This platform allows club owners to generate and manage
+  professional application forms with controlled access.
+</p>
 
-<input id="bot" placeholder="Telegram BOT TOKEN">
-<input id="chat" placeholder="Telegram CHAT ID">
+<p>
+  To proceed, please complete the required payment and
+  contact the owner to receive your <strong>access key</strong>.
+</p>
 
-<button onclick="generate()">GENERATE</button>
+<p style="margin-top:14px;font-size:13px;color:#9aa4c7;line-height:1.6;">
+  <strong>Important Notes:</strong><br>
+  • The generated output is <strong>open-source</strong> and provided <strong>as-is</strong>. Use it at your own risk.<br>
+  • If you are unsure how to use or modify the generated form, please ask the owner for guidance or consult someone you trust.<br>
+  • <strong>All payments are final and non-refundable.</strong> Please review and decide carefully before proceeding.<br>
+  • Once an access key is entered, your usage time will begin immediately. You will have <strong>60 seconds</strong> to generate your output.<br>
+  <br>
+  <strong>Good luck, and use this tool responsibly.</strong>
+</p>
 
-<textarea id="output"></textarea>
+    <p><strong>Contact the Owner:</strong></p>
 
-<button onclick="copy()">COPY</button>
+    <div class="socials">
+     
+      <a href="https://t.me/nelhumble" target="_blank">
+  <img
+    src="https://i.ibb.co/XfnXPDmZ/5069.png"
+    alt="Telegram"
+    loading="eager"
+    decoding="async">
+  Telegram
+</a>
 
-<script>
-async function generate(){
-  const res = await fetch("template.html");
-  let tpl = await res.text();
+<a href="https://www.facebook.com/profile.php?id=61577828138380" target="_blank">
+  <img
+    src="https://i.ibb.co/gL2cMVSK/5072.png"
+    alt="Facebook"
+    loading="eager"
+    decoding="async">
+  Facebook
+</a>
+    </div>
+  </div>
 
-  tpl = tpl
-    .replaceAll("{{CLUB_NAME}}", club.value)
-    .replaceAll("{{FB_LINK}}", fb.value)
-    .replaceAll("{{IG_LINK}}", ig.value)
-    .replaceAll("{{TG_LINK}}", tg.value)
-    .replaceAll("{{TT_LINK}}", tt.value)
-    .replaceAll("{{BOT_TOKEN}}", bot.value)
-    .replaceAll("{{CHAT_ID}}", chat.value);
+  
+  <div class="card">
+    <h3>🔐 Access Key Verification</h3>
 
-  output.value = tpl;
-}
+    <input id="accessKey" placeholder="Enter your access key">
+    <button onclick="checkKey()">Verify Access</button>
 
-function copy(){
-  output.select();
-  document.execCommand("copy");
-  alert("COPIED");
-}
-</script>
+    <div id="status"></div>
+    <div id="timer"></div>
+  </div>
 
+  
+  <div class="card" id="formMaker">
+    <h3>🛠 Form Generator</h3>
+
+    <p>
+      Access has been granted.  
+      You may now generate your club application form.
+    </p>
+
+    <button onclick="generateForm()">Generate Form</button>
+
+    <div id="output" style="display:none;margin-top:12px">
+      <input id="formLink" readonly>
+      <button onclick="copyLink()">Copy Link</button>
+    </div>
+  </div>
+
+</div>
 </body>
 </html>
