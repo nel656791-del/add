@@ -52,16 +52,15 @@ body{
   padding:24px;
 }
 
-
 h2,h3{margin-top:0}
+
 p{
   font-size:14px;
   line-height:1.6;
   color:var(--muted);
 }
 
-
-input,button{
+input,button,textarea{
   width:100%;
   padding:14px;
   border-radius:14px;
@@ -70,6 +69,11 @@ input,button{
   color:var(--text);
   font-size:14px;
 }
+
+textarea{
+  resize:none;
+}
+
 button{
   margin-top:12px;
   cursor:pointer;
@@ -77,7 +81,6 @@ button{
   background:linear-gradient(135deg,var(--accent),var(--accent2));
   color:#0b0f1a;
 }
-
 
 .socials{
   display:flex;
@@ -106,7 +109,6 @@ button{
   object-fit:contain;
   filter:none;
 }
-
 .socials a:hover img{
   transform:scale(1.05);
 }
@@ -120,18 +122,24 @@ button{
   color:var(--muted);
 }
 
+
 #formMaker{display:none}
+
+
+#output{display:none}
 </style>
 
-<script>
 
+<script>
 const firebaseConfig = {
   apiKey: "YOUR_API_KEY",
   authDomain: "YOUR_PROJECT.firebaseapp.com",
   projectId: "YOUR_PROJECT_ID",
 };
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+try {
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+} catch(e) {}
 </script>
 </head>
 
@@ -143,47 +151,38 @@ const db = firebase.firestore();
     <h2>Club Form Maker</h2>
 
     <p>
-  Welcome to <strong>Club Form Maker</strong>.  
-  This platform allows club owners to generate and manage
-  professional application forms with controlled access.
-</p>
+      Welcome to <strong>Club Form Maker</strong>.  
+      This platform allows club owners to generate and manage
+      professional application forms with controlled access.
+    </p>
 
-<p>
-  To proceed, please complete the required payment and
-  contact the owner to receive your <strong>access key</strong>.
-</p>
+    <p>
+      To proceed, please complete the required payment and
+      contact the owner to receive your <strong>access key</strong>.
+    </p>
 
-<p style="margin-top:14px;font-size:13px;color:#9aa4c7;line-height:1.6;">
-  <strong>Important Notes:</strong><br>
-  • The generated output is <strong>open-source</strong> and provided <strong>as-is</strong>. Use it at your own risk.<br>
-  • If you are unsure how to use or modify the generated form, please ask the owner for guidance or consult someone you trust.<br>
-  • <strong>All payments are final and non-refundable.</strong> Please review and decide carefully before proceeding.<br>
-  • Once an access key is entered, your usage time will begin immediately. You will have <strong>60 seconds</strong> to generate your output.<br>
-  <br>
-  <strong>Good luck, and use this tool responsibly.</strong>
-</p>
+    <p style="margin-top:14px;font-size:13px;color:#9aa4c7;line-height:1.6;">
+      <strong>Important Notes:</strong><br>
+      • The generated output is <strong>open-source</strong> and provided <strong>as-is</strong>. Use it at your own risk.<br>
+      • If you are unsure how to use or modify the generated form, please ask the owner for guidance or consult someone you trust.<br>
+      • <strong>All payments are final and non-refundable.</strong> Please review and decide carefully before proceeding.<br>
+      • Once an access key is entered, your usage time will begin immediately. You will have <strong>60 seconds</strong> to generate your output.<br>
+      <br>
+      <strong>Good luck, and use this tool responsibly.</strong>
+    </p>
 
     <p><strong>Contact the Owner:</strong></p>
 
     <div class="socials">
-     
-      <a href="https://t.me/nelhumble" target="_blank">
-  <img
-    src="https://i.ibb.co/XfnXPDmZ/5069.png"
-    alt="Telegram"
-    loading="eager"
-    decoding="async">
-  Telegram
-</a>
+      <a href="https://t.me/nelhumble" target="_blank" rel="noopener">
+        <img src="https://i.ibb.co/XfnXPDmZ/5069.png" alt="Telegram" loading="eager" decoding="async">
+        Telegram
+      </a>
 
-<a href="https://www.facebook.com/profile.php?id=61577828138380" target="_blank">
-  <img
-    src="https://i.ibb.co/gL2cMVSK/5072.png"
-    alt="Facebook"
-    loading="eager"
-    decoding="async">
-  Facebook
-</a>
+      <a href="https://www.facebook.com/profile.php?id=61577828138380" target="_blank" rel="noopener">
+        <img src="https://i.ibb.co/gL2cMVSK/5072.png" alt="Facebook" loading="eager" decoding="async">
+        Facebook
+      </a>
     </div>
   </div>
 
@@ -202,19 +201,75 @@ const db = firebase.firestore();
   <div class="card" id="formMaker">
     <h3>🛠 Form Generator</h3>
 
-    <p>
-      Access has been granted.  
-      You may now generate your club application form.
+    <p style="margin-bottom:10px;">
+      Template Source (from <strong>template.html</strong>)
     </p>
 
-    <button onclick="generateForm()">Generate Form</button>
 
-    <div id="output" style="display:none;margin-top:12px">
-      <input id="formLink" readonly>
-      <button onclick="copyLink()">Copy Link</button>
+    <textarea id="templateBox" rows="10" readonly placeholder="Template will appear here after key is verified..."></textarea>
+
+    
+    <button onclick="generateForm()">Generate</button>
+
+    
+    <div id="output" style="margin-top:12px">
+      <p style="margin:0 0 8px 0;color:var(--muted);">Generated Output (Source Code)</p>
+      <textarea id="outputCode" rows="10" readonly></textarea>
+      <button onclick="copyLink()">Copy Code</button>
     </div>
   </div>
 
 </div>
+
+<script>
+
+async function loadTemplate() {
+  const box = document.getElementById("templateBox");
+  try {
+    const res = await fetch("./template.html", { cache: "no-store" });
+    if (!res.ok) throw new Error("Template not found");
+    const text = await res.text();
+    box.value = text;
+  } catch (e) {
+    box.value =
+      "ERROR: Cannot load template.html.\n\n" +
+      "Fix:\n" +
+      "1) Make sure template.html is in the SAME folder as index.html\n" +
+      "2) Open using localhost/hosting (not file://)\n" +
+      "   Example: http://localhost:5500/index.html\n";
+  }
+}
+
+
+(function watchFormMaker(){
+  const formMaker = document.getElementById("formMaker");
+  const obs = new MutationObserver(() => {
+    const visible = getComputedStyle(formMaker).display !== "none";
+    if (visible) loadTemplate();
+  });
+  obs.observe(formMaker, { attributes: true, attributeFilter: ["style", "class"] });
+})();
+
+
+function generateForm() {
+  const src = document.getElementById("templateBox").value.trim();
+  if (!src) {
+    alert("Template is empty or not loaded.");
+    return;
+  }
+  document.getElementById("outputCode").value = src;
+  document.getElementById("output").style.display = "block";
+}
+
+
+function copyLink() {
+  const ta = document.getElementById("outputCode");
+  ta.select();
+  ta.setSelectionRange(0, 999999);
+  document.execCommand("copy");
+  alert("Source code copied.");
+}
+</script>
+
 </body>
 </html>
