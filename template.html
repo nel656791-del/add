@@ -110,6 +110,13 @@ button:active{ transform:scale(.97); }
   letter-spacing:2px;
   color:#7fdcff;
 }
+#menuBtns {
+  pointer-events: none;
+}
+
+#menuBtns.active {
+  pointer-events: auto;
+}
 </style>
 </head>
 
@@ -118,7 +125,7 @@ button:active{ transform:scale(.97); }
 <h1>{{CLUB_NAME}}</h1>
 <h2 id="welcomeMsg"></h2>
 
-<div class="menu-btns" id="menuBtns" style="display:none;">
+<div class="menu-btns" id="menuBtns">
   <button type="button" onclick="chooseActivity('fillup')">Fill Up Form</button>
 </div>
 
@@ -218,6 +225,8 @@ Reason: \${reason}
   }).then(()=>alert("Sent"));
 };
 </script>
+
 <script src="welcome.js"></script>
+
 </body>
 </html>
