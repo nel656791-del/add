@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Club Form Generator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  background:#000;
+  color:#00ff9c;
+  font-family:monospace;
+  padding:16px;
+}
+input,textarea,button{
+  width:100%;
+  padding:10px;
+  margin-bottom:10px;
+  background:#000;
+  color:#00ff9c;
+  border:1px solid #00ff9c;
+}
+textarea{height:420px;}
+button{cursor:pointer;}
+</style>
+</head>
+
+<body>
+
+<h2>HTML Form Generator</h2>
+
+<input id="club" placeholder="Club Name">
+<input id="bot" placeholder="Telegram Bot Token">
+<input id="chat" placeholder="Telegram Chat ID">
+<input id="fb" placeholder="Facebook Link">
+<input id="ig" placeholder="Instagram Link">
+<input id="tg" placeholder="Telegram Link">
+<input id="tt" placeholder="TikTok Link">
+
+<button onclick="generate()">GENERATE</button>
+
+<textarea id="out" placeholder="Generated HTML here..."></textarea>
+
+<button onclick="copyText()">COPY</button>
+
+<script>
+let TEMPLATE = "";
+
+fetch("template.html")
+  .then(res => res.text())
+  .then(txt => TEMPLATE = txt);
+
+function generate(){
+  if(!TEMPLATE){ alert("Template not loaded"); return; }
+
+  let html = TEMPLATE
+    .replace(/{{CLUB_NAME}}/g, club.value || "YOUR CLUB")
+    .replace(/{{BOT_TOKEN}}/g, bot.value || "BOT_TOKEN")
+    .replace(/{{CHAT_ID}}/g, chat.value || "CHAT_ID")
+    .replace(/{{FB}}/g, fb.value || "#")
+    .replace(/{{IG}}/g, ig.value || "#")
+    .replace(/{{TG}}/g, tg.value || "#")
+    .replace(/{{TT}}/g, tt.value || "#");
+
+  out.value = html;
+}
+
+function copyText(){
+  out.select();
+  document.execCommand("copy");
+  alert("COPIED");
+}
+</script>
+
+</body>
+</html>
