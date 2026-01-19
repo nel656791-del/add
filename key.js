@@ -1,54 +1,71 @@
 
-const VALID_KEYS = ["CLUB-12345", "VIP-56789", "FORM-9999"];
+function getValidKeys(){
+  try{
+    return JSON.parse(localStorage.getItem("ADMIN_KEYS")) || [];
+  }catch{
+    return [];
+  }
+}
 
 let expireWatcher = null;
 
-function checkKey() {
-  const key = document.getElementById("accessKey").value.trim();
-  const status = document.getElementById("status");
-  const formBox = document.getElementById("formMaker");
+function checkKey(){
+  const keyInput = document.getElementById("accessKey");
+  const statusEl = document.getElementById("status");
+  const formBox  = document.getElementById("formMaker");
 
-  if (!key) {
-    status.textContent = "Enter access key.";
+  const key = keyInput.value.trim();
+
+  if(!key){
+    statusEl.textContent = "Please enter an access key.";
     formBox.style.display = "none";
     return;
   }
 
-  if (!VALID_KEYS.includes(key)) {
-    status.textContent = "Invalid key.";
+  const VALID_KEYS = getValidKeys();
+
+  if(!VALID_KEYS.includes(key)){
+    statusEl.textContent = "Invalid access key.";
+    statusEl.style.color = "#ff5c7a";
     formBox.style.display = "none";
     return;
   }
 
   const now = Date.now();
-  const storeKey = "expire_" + key;
-  const savedExpireAt = localStorage.getItem(storeKey);
+  const storeKey = "EXPIRE_" + key;
+  const savedExpire = localStorage.getItem(storeKey);
 
-  
-  if (savedExpireAt && now >= Number(savedExpireAt)) {
-    status.textContent = "Key expired.";
+
+  if(savedExpire && now >= Number(savedExpire)){
+    statusEl.textContent = "Key expired.";
+    statusEl.style.color = "#ff5c7a";
     formBox.style.display = "none";
     return;
   }
 
   
-  let expireAt = savedExpireAt ? Number(savedExpireAt) : (now + 60 * 1000);
-  if (!savedExpireAt) localStorage.setItem(storeKey, String(expireAt));
+  let expireAt;
+  if(!savedExpire){
+    expireAt = now + (60 * 1000); 
+    localStorage.setItem(storeKey, String(expireAt));
+  }else{
+    expireAt = Number(savedExpire);
+  }
 
   
-  status.textContent = "Access granted.";
+  statusEl.textContent = "Access granted.";
+  statusEl.style.color = "#38d39f";
   formBox.style.display = "block";
 
   
-  if (expireWatcher) clearInterval(expireWatcher);
+  if(expireWatcher) clearInterval(expireWatcher);
 
- 
-  expireWatcher = setInterval(() => {
-    const t = Date.now();
-    if (t >= expireAt) {
+  expireWatcher = setInterval(()=>{
+    if(Date.now() >= expireAt){
       clearInterval(expireWatcher);
       expireWatcher = null;
-      status.textContent = "Key expired.";
+      statusEl.textContent = "Key expired.";
+      statusEl.style.color = "#ff5c7a";
       formBox.style.display = "none";
     }
   }, 500);
