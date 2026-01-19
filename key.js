@@ -1,5 +1,5 @@
 
-const VALID_KEYS = ["CLUB-1234", "VIP-5678", "FORM-9999"];
+const VALID_KEYS = ["CLUB-12345", "VIP-56789", "FORM-9999"];
 
 let expireWatcher = null;
 
