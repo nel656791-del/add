@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CrisForm Admin Panel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family:system-ui,Segoe UI,Roboto;
+  background:radial-gradient(circle at top,#111,#000);
+  color:#eaffff;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+.panel{
+  width:380px;
+  background:rgba(10,10,20,.9);
+  border:1px solid #00eaff55;
+  border-radius:18px;
+  padding:26px;
+  box-shadow:0 0 40px #00eaff22;
+}
+h2{
+  text-align:center;
+  letter-spacing:3px;
+  margin-bottom:20px;
+}
+.section{
+  margin-bottom:20px;
+}
+label{
+  font-size:12px;
+  opacity:.8;
+}
+input{
+  width:100%;
+  margin-top:6px;
+  padding:10px;
+  border-radius:12px;
+  border:1px solid #00eaff33;
+  background:#050b18;
+  color:#eaffff;
+}
+.toggle{
+  padding:18px;
+  border-radius:14px;
+  background:#050b18;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+button{
+  padding:8px 14px;
+  border-radius:18px;
+  border:none;
+  cursor:pointer;
+  font-weight:700;
+  letter-spacing:1px;
+}
+.on{background:#38d39f;color:#000}
+.off{background:#ff5c7a;color:#000}
+.add{background:#6ea8ff;color:#000;margin-top:10px}
+.keylist{
+  background:#050b18;
+  border-radius:12px;
+  padding:10px;
+  font-size:12px;
+  max-height:140px;
+  overflow:auto;
+}
+.keyitem{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:6px;
+}
+.keyitem button{
+  background:#ff5c7a;
+  color:#000;
+  font-size:10px;
+}
+footer{
+  text-align:center;
+  font-size:11px;
+  opacity:.6;
+  margin-top:14px;
+}
+</style>
+</head>
+
+<body>
+<div class="panel">
+  <h2>CRISFORM ADMIN</h2>
+
+  <!-- SITE TOGGLE -->
+  <div class="section toggle">
+    <span>Site Status</span>
+    <button id="toggleBtn"></button>
+  </div>
+
+  <!-- ADD KEY -->
+  <div class="section">
+    <label>Add Access Key</label>
+    <input id="newKey" placeholder="e.g. CLUB-2026">
+    <button class="add" onclick="addKey()">ADD KEY</button>
+  </div>
+
+  <!-- KEY LIST -->
+  <div class="section">
+    <label>Active Keys</label>
+    <div class="keylist" id="keyList"></div>
+  </div>
+
+  <footer>© CrisForm Panel</footer>
+</div>
+
+<script>
+
+const btn = document.getElementById("toggleBtn");
+
+function renderToggle(){
+  const state = localStorage.getItem("SITE_STATUS") || "on";
+  if(state==="on"){
+    btn.textContent="ONLINE";
+    btn.className="on";
+  }else{
+    btn.textContent="OFFLINE";
+    btn.className="off";
+  }
+}
+btn.onclick = ()=>{
+  const cur = localStorage.getItem("SITE_STATUS") || "on";
+  localStorage.setItem("SITE_STATUS", cur==="on"?"off":"on");
+  renderToggle();
+};
+
+
+let keys = JSON.parse(localStorage.getItem("ADMIN_KEYS") || "[]");
+
+function saveKeys(){
+  localStorage.setItem("ADMIN_KEYS", JSON.stringify(keys));
+  renderKeys();
+}
+
+function addKey(){
+  const k = newKey.value.trim();
+  if(!k || keys.includes(k)) return;
+  keys.push(k);
+  saveKeys();
+  newKey.value="";
+}
+
+function removeKey(k){
+  keys = keys.filter(x => x !== k);
+  saveKeys();
+}
+
+function renderKeys(){
+  keyList.innerHTML = "";
+  keys.forEach(k=>{
+    const div = document.createElement("div");
+    div.className="keyitem";
+    div.innerHTML = `<span>${k}</span>
+      <button onclick="removeKey('${k}')">X</button>`;
+    keyList.appendChild(div);
+  });
+}
+
+renderToggle();
+renderKeys();
+</script>
+</body>
+</html>
