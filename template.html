@@ -110,12 +110,9 @@ button:active{ transform:scale(.97); }
   letter-spacing:2px;
   color:#7fdcff;
 }
-#menuBtns {
-  pointer-events: none;
-}
-
-#menuBtns.active {
-  pointer-events: auto;
+#menuBtns{
+  opacity:0;
+  pointer-events:none;
 }
 </style>
 </head>
@@ -126,7 +123,9 @@ button:active{ transform:scale(.97); }
 <h2 id="welcomeMsg"></h2>
 
 <div class="menu-btns" id="menuBtns">
-  <button type="button" onclick="chooseActivity('fillup')">Fill Up Form</button>
+  <button type="button" onclick="chooseActivity('fillup')">
+    Fill Up Form
+  </button>
 </div>
 
 <div id="fillupSection" style="display:none;">
@@ -226,7 +225,7 @@ Reason: \${reason}
 };
 </script>
 
-<script src="welcome.js"></script>
+<script src="welcome.js" defer></script>
 
 </body>
 </html>
