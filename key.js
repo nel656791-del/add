@@ -1,51 +1,55 @@
 
-const ACCESS_KEYS = [
-  "CLUB-1234",
-  "VIP-5678",
-  "FORM-9999"
-];
+const VALID_KEYS = ["CLUB-1234", "VIP-5678", "FORM-9999"];
+
+let expireWatcher = null;
 
 function checkKey() {
   const key = document.getElementById("accessKey").value.trim();
-  const statusEl = document.getElementById("status");
-  const formBox  = document.getElementById("formMaker");
+  const status = document.getElementById("status");
+  const formBox = document.getElementById("formMaker");
 
   if (!key) {
-    statusEl.innerText = "Please enter your access key.";
-    statusEl.style.color = "#ff7cff";
+    status.textContent = "Enter access key.";
+    formBox.style.display = "none";
     return;
   }
 
-  
-  if (!ACCESS_KEYS.includes(key)) {
-    statusEl.innerText = "Invalid access key.";
-    statusEl.style.color = "#ff5c7a";
+  if (!VALID_KEYS.includes(key)) {
+    status.textContent = "Invalid key.";
     formBox.style.display = "none";
     return;
   }
 
   const now = Date.now();
-  const storageKey = "key_" + key;
-
- 
-  const storedExpire = localStorage.getItem(storageKey);
+  const storeKey = "expire_" + key;
+  const savedExpireAt = localStorage.getItem(storeKey);
 
   
-  if (storedExpire && now > Number(storedExpire)) {
-    statusEl.innerText = "Key expired.";
-    statusEl.style.color = "#ff5c7a";
+  if (savedExpireAt && now >= Number(savedExpireAt)) {
+    status.textContent = "Key expired.";
     formBox.style.display = "none";
     return;
   }
 
   
-  if (!storedExpire) {
-    const expireAt = now + (60 * 60 * 1000); 
-    localStorage.setItem(storageKey, expireAt);
-  }
+  let expireAt = savedExpireAt ? Number(savedExpireAt) : (now + 60 * 1000);
+  if (!savedExpireAt) localStorage.setItem(storeKey, String(expireAt));
 
-
-  statusEl.innerText = "Access granted.";
-  statusEl.style.color = "#38d39f";
+  
+  status.textContent = "Access granted.";
   formBox.style.display = "block";
+
+  
+  if (expireWatcher) clearInterval(expireWatcher);
+
+ 
+  expireWatcher = setInterval(() => {
+    const t = Date.now();
+    if (t >= expireAt) {
+      clearInterval(expireWatcher);
+      expireWatcher = null;
+      status.textContent = "Key expired.";
+      formBox.style.display = "none";
+    }
+  }, 500);
 }
