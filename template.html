@@ -2,13 +2,19 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>{{CLUB_NAME}}</title>
+<title>Form Club Dashboard</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#00eaff">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
-
+/* UNCHANGED */
 body{
   margin:0;
   font-family:"Poppins",sans-serif;
@@ -25,81 +31,192 @@ h2{font-size:13px;letter-spacing:4px;color:#9befff;}
 label{font-size:11px;letter-spacing:1px;color:#ff7cff;}
 input, select, textarea{
   width:100%; box-sizing:border-box; padding:12px; margin-bottom:12px;
-  border-radius:8px; background:#000; color:#eaffff;
-  border:1px solid #00eaff; font-size:16px;
+  border-radius:8px; background:#000; color:#eaffff; border:1px solid #00eaff; font-size:16px;
 }
 textarea{resize:none;}
 button{
-  width:100%; padding:14px; border-radius:28px;
-  font-family:"Playfair Display",serif; letter-spacing:3px;
-  border:1px solid rgba(0,255,255,.6);
-  cursor:pointer;
-  background:linear-gradient(120deg,#ff00cc,#00eaff,#ff00cc);
-  background-size:200% 100%; color:#000;
+  width:100%; padding:14px; border-radius:28px; font-family:"Playfair Display",serif; letter-spacing:3px;
+  border:1px solid rgba(0,255,255,.6); cursor:pointer;
+  background:linear-gradient(120deg,#ff00cc,#00eaff,#ff00cc); background-size:200% 100%; color:#000;
+  transition:background-position .6s ease, transform .15s ease;
+}
+button:hover{ background-position:100% 0; transform:translateY(-2px);}
+button:active{ transform:scale(.97); }
+.menu-btns{ display:flex; justify-content:center; gap:12px; margin-bottom:20px;}
+#welcomeMsg{
+  font-family: "Playfair Display", serif;
+  font-size: 20px;
+  text-align: center;
+  line-height: 1.6;
+  margin: 20px auto 30px auto;
+  max-width: 420px;
+  color: rgb(30, 144, 255);
+  letter-spacing: 1px;
+  text-shadow: 0 0 12px rgba(0,255,255,.25);
+  min-height: 90px;
+  transition: opacity .5s ease;
+}
+#menuBtns{
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .6s ease;
+}
+.menu-btns, .social-btns {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 20px;
+}
+.social-footer{
+  margin-top:40px;
+  padding:26px 16px 18px;
+  text-align:center;
+  border-top:1px solid rgba(0,255,255,.25);
+  background:linear-gradient(180deg, rgba(0,0,0,.2), rgba(0,0,0,.45));
+}
+.social-title{
+  font-size:11px;
+  letter-spacing:4px;
+  color:#9befff;
+  margin-bottom:14px;
+}
+.social-btns{
+  display:flex;
+  justify-content:center;
+  gap:18px;
+  margin-bottom:14px;
+}
+.social-btns a{
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  background:rgba(0,255,255,.1);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(0,255,255,.4);
+  transition:.25s ease;
+}
+.social-btns a:hover{
+  transform:translateY(-4px) scale(1.05);
+  box-shadow:0 0 18px rgba(0,255,255,.6);
+}
+.social-btns img{
+  width:22px;
+  height:22px;
+}
+.social-copy{
+  font-size:10px;
+  letter-spacing:2px;
+  color:#7fdcff;
 }
 </style>
 </head>
 
 <body>
-
 <div class="container">
 <h1>{{CLUB_NAME}}</h1>
+<h2 id="welcomeMsg"></h2>
 
-<label>Name</label>
-<input id="fName">
+<div class="menu-btns" id="menuBtns" style="display:none;">
+  <button type="button" onclick="chooseActivity('fillup')">Fill Up Form</button>
+</div>
 
-<label>Age</label>
-<select id="fAge"></select>
+<div id="fillupSection" style="display:none;">
+  <div style="text-align:center;margin-bottom:12px;">
+    <img loading="lazy" src="logo.png" alt="Club Logo" width="120">
+    <h2>Join to Our Club</h2>
+  </div>
 
-<label>CPM ID</label>
-<input id="fCpm">
+  <label>Name</label>
+  <input id="fName" type="text">
 
-<label>IGN</label>
-<input id="fIgn">
+  <label>Age</label>
+  <select id="fAge"><option value="">Select Age</option></select>
 
-<label>Role</label>
-<select id="fRole">
-<option>Photographer</option>
-<option>Videographer</option>
-<option>Editor</option>
-<option>Event Manager</option>
-</select>
+  <label>CPM ID</label>
+  <input id="fCpm" type="text">
 
-<label>Reason</label>
-<textarea id="fReason"></textarea>
+  <label>IGN</label>
+  <input id="fIgn" type="text">
 
-<label>Upload Image</label>
-<input id="fImage" type="file" accept="image/*">
+  <label>Role</label>
+  <select id="fRole">
+    <option value="">Select Role</option>
+    <option value="Photographer">Photographer</option>
+    <option value="Videographer">Videographer</option>
+    <option value="Editor">Editor</option>
+    <option value="Event Manager">Event Manager</option>
+  </select>
 
-<button onclick="submitForm()">Submit</button>
+  <label>Club Before & Reason for Joining</label>
+  <textarea id="fReason" rows="3"></textarea>
+
+  <label>Upload Image</label>
+  <input id="fImage" type="file" accept="image/*">
+
+<button type="button" onclick="submitFillupForm()">Submit</button>
+</div>
 </div>
 
 <footer class="social-footer">
-  <a href="{{FB}}">Facebook</a> |
-  <a href="{{IG}}">Instagram</a> |
-  <a href="{{TG}}">Telegram</a> |
-  <a href="{{TT}}">TikTok</a>
+  <div class="social-title">CONNECT WITH US</div>
+  <div class="social-btns">
+    <a href="{{FB_LINK}}" target="_blank"><img src="https://i.ibb.co/gL2cMVSK/5072.png"></a>
+    <a href="{{IG_LINK}}" target="_blank"><img src="https://i.ibb.co/84620cWW/5070.png"></a>
+    <a href="{{TG_LINK}}" target="_blank"><img src="https://i.ibb.co/XfnXPDmZ/5069.png"></a>
+    <a href="{{TT_LINK}}" target="_blank"><img src="https://i.ibb.co/HZyrtC2/5071.png"></a>
+  </div>
+  <div class="social-copy">© 2026 Your Club</div>
 </footer>
 
-<script>
+<script type="module">
 for(let i=17;i<=50;i++){
-  fAge.innerHTML += '<option>'+i+'</option>';
+  document.getElementById("fAge").innerHTML += `<option value="${i}">${i}</option>`;
 }
 
-function submitForm(){
-  const img = fImage.files[0];
-  if(!img){ alert("Upload image"); return; }
+window.chooseActivity = function(act){
+  if(act === "fillup"){
+    document.getElementById("fillupSection").style.display="block";
+  }
+};
 
-  const fd = new FormData();
-  fd.append("chat_id","{{CHAT_ID}}");
-  fd.append("photo",img);
-  fd.append("caption","New Club Registration");
+window.submitFillupForm = function(){
+  const name = fName.value.trim();
+  const age  = fAge.value;
+  const cpm  = fCpm.value.trim();
+  const ign  = fIgn.value.trim();
+  const role = fRole.value;
+  const reason = fReason.value.trim();
+  const imageFile = fImage.files[0];
 
-  fetch("https://api.telegram.org/bot{{BOT_TOKEN}}/sendPhoto",{
+  if(!name || !age || !cpm || !ign || !role || !reason || !imageFile){
+    return alert("Please fill all fields and upload an image.");
+  }
+
+  const BOT_TOKEN = "{{BOT_TOKEN}}";
+  const CHAT_ID   = "{{CHAT_ID}}";
+
+  const caption = \`
+📌 New Club Registration
+Name: \${name}
+Age: \${age}
+CPM ID: \${cpm}
+IGN: \${ign}
+Role: \${role}
+Reason: \${reason}
+\`;
+
+  const formData = new FormData();
+  formData.append("chat_id", CHAT_ID);
+  formData.append("photo", imageFile);
+  formData.append("caption", caption);
+
+  fetch(\`https://api.telegram.org/bot\${BOT_TOKEN}/sendPhoto\`, {
     method:"POST",
-    body:fd
-  }).then(()=>alert("Sent to Telegram"));
-}
+    body:formData
+  }).then(()=>alert("Sent"));
+};
 </script>
 
 </body>
