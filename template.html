@@ -2,14 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Form Club Dashboard</title>
+<title>Club Application Form</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#00eaff">
-<link rel="apple-touch-icon" href="./icons/icon-192.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
 
@@ -21,52 +15,55 @@ body{
   color:#eaffff;
 }
 .container{
-  margin:14px; padding:22px; border-radius:26px;
-  background:rgba(8,8,20,.65); border:1px solid rgba(0,255,255,.25);
+  margin:14px;
+  padding:22px;
+  border-radius:26px;
+  background:rgba(8,8,20,.65);
+  border:1px solid rgba(0,255,255,.25);
 }
 h1,h2,h3,h4{text-align:center;}
-h1{font-family:"Playfair Display",serif;letter-spacing:3px;}
-h2{font-size:13px;letter-spacing:4px;color:#9befff;}
-label{font-size:11px;letter-spacing:1px;color:#ff7cff;}
+h1{
+  font-family:"Playfair Display",serif;
+  letter-spacing:3px;
+}
+h2{
+  font-size:13px;
+  letter-spacing:4px;
+  color:#9befff;
+}
+label{
+  font-size:11px;
+  letter-spacing:1px;
+  color:#ff7cff;
+}
 input, select, textarea{
-  width:100%; box-sizing:border-box; padding:12px; margin-bottom:12px;
-  border-radius:8px; background:#000; color:#eaffff; border:1px solid #00eaff; font-size:16px;
+  width:100%;
+  box-sizing:border-box;
+  padding:12px;
+  margin-bottom:12px;
+  border-radius:8px;
+  background:#000;
+  color:#eaffff;
+  border:1px solid #00eaff;
+  font-size:16px;
 }
 textarea{resize:none;}
 button{
-  width:100%; padding:14px; border-radius:28px; font-family:"Playfair Display",serif; letter-spacing:3px;
-  border:1px solid rgba(0,255,255,.6); cursor:pointer;
-  background:linear-gradient(120deg,#ff00cc,#00eaff,#ff00cc); background-size:200% 100%; color:#000;
+  width:100%;
+  padding:14px;
+  border-radius:28px;
+  font-family:"Playfair Display",serif;
+  letter-spacing:3px;
+  border:1px solid rgba(0,255,255,.6);
+  cursor:pointer;
+  background:linear-gradient(120deg,#ff00cc,#00eaff,#ff00cc);
+  background-size:200% 100%;
+  color:#000;
   transition:background-position .6s ease, transform .15s ease;
 }
 button:hover{ background-position:100% 0; transform:translateY(-2px);}
 button:active{ transform:scale(.97); }
-.menu-btns{ display:flex; justify-content:center; gap:12px; margin-bottom:20px;}
-  #welcomeMsg{
-  font-family: "Playfair Display", serif;
-  font-size: 20px;
-  text-align: center;
-  line-height: 1.6;
-  margin: 20px auto 30px auto;
-  max-width: 420px;
-  color: rgb(30, 144, 255);
-  letter-spacing: 1px;
-  text-shadow: 0 0 12px rgba(0,255,255,.25);
-  min-height: 90px;
-  transition: opacity .5s ease;
-}
 
-#menuBtns{
-  justify-content: center;
-  opacity: 0;
-  transition: opacity .6s ease;
-}
-  .menu-btns, .social-btns {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  margin-top: 20px;
-}
 .social-footer{
   margin-top:40px;
   padding:26px 16px 18px;
@@ -114,27 +111,18 @@ button:active{ transform:scale(.97); }
 </head>
 
 <body>
+
 <div class="container">
-<h1>(YOUR CLUB NAME)</h1>
-<h2 id="welcomeMsg"></h2>
-
-
-<div class="menu-btns" id="menuBtns" style="display:none;">
-  <button type="button" onclick="chooseActivity('fillup')">Fill Up Form</button>
-</div>
-
-<!-- Fill Up Form Section -->
-<div id="fillupSection" style="display:none;">
-  <div style="text-align:center;margin-bottom:12px;">
-    <img loading="lazy" src="logo.png" alt="Club Logo" width="120">
-    <h2>Join to Our Club</h2>
-  </div>
+  <h1>(YOUR CLUB NAME)</h1>
+  <h2>JOIN OUR CLUB</h2>
 
   <label>Name</label>
   <input id="fName" type="text">
 
   <label>Age</label>
-  <select id="fAge"><option value="">Select Age</option></select>
+  <select id="fAge">
+    <option value="">Select Age</option>
+  </select>
 
   <label>CPM ID</label>
   <input id="fCpm" type="text">
@@ -145,10 +133,10 @@ button:active{ transform:scale(.97); }
   <label>Role</label>
   <select id="fRole">
     <option value="">Select Role</option>
-    <option value="Photographer">Photographer</option>
-    <option value="Videographer">Videographer</option>
-    <option value="Editor">Editor</option>
-    <option value="Event Manager">Event Manager</option>
+    <option>Photographer</option>
+    <option>Videographer</option>
+    <option>Editor</option>
+    <option>Event Manager</option>
   </select>
 
   <label>Club Before & Reason for Joining</label>
@@ -157,124 +145,98 @@ button:active{ transform:scale(.97); }
   <label>Upload Image</label>
   <input id="fImage" type="file" accept="image/*">
 
-<button type="button" onclick="submitFillupForm()">Submit</button>
+  <button onclick="submitFillupForm()">SUBMIT</button>
 
-<p style="
-  margin-top:14px;
-  font-size:12px;
-  text-align:center;
-  line-height:1.6;
-  color:#9befff;
-">
-⚠️ <strong>IMPORTANT:</strong><br>
-After submitting, please <b>ADD / PM / DM our ADMIN</b><br>
-so approval will be faster.<br><br>
-
-To avoid hassle finding your account,<br>
-please click the <b>Facebook icon</b> below<br>
-and message our admin directly.
-</p>
-</div>
+  <p style="margin-top:14px;font-size:12px;text-align:center;color:#9befff;">
+    ⚠️ After submitting, please message our admin for faster approval.Please click Facebook or Telegram.Thank you.
+  </p>
 </div>
 
 <footer class="social-footer">
   <div class="social-title">CONNECT WITH US</div>
 
   <div class="social-btns">
-    <a href="https://www.facebook.com/profile.php?id=61577828138380" target="_blank">
-      <img loading="lazy" src="https://i.ibb.co/gL2cMVSK/5072.png" alt="Facebook">
+    <a href="https://www.facebook.com/YOURPAGE" target="_blank" rel="noopener">
+      <img
+        src="https://i.ibb.co/gL2cMVSK/5072.png"
+        alt="Facebook"
+        loading="eager"
+        decoding="async">
     </a>
 
-    <a href="https://instagram.com/YOURPAGE" target="_blank">
-      <img loading="lazy" src="https://i.ibb.co/84620cWW/5070.png" alt="Instagram">
+    <a href="https://instagram.com/YOURPAGE" target="_blank" rel="noopener">
+      <img
+        src="https://i.ibb.co/84620cWW/5070.png"
+        alt="Instagram"
+        loading="eager"
+        decoding="async">
     </a>
 
-    <a href="https://t.me/nelhumble" target="_blank">
-      <img loading="lazy" src="https://i.ibb.co/XfnXPDmZ/5069.png" alt="Telegram">
-    </a>
-
-    <a href="https://tiktok.com/@arnelb11111" target="_blank">
-      <img loading="lazy" src="https://i.ibb.co/HZyrtC2/5071.png" alt="TikTok">
+    <a href="https://t.me/YOURPAGE" target="_blank" rel="noopener">
+      <img
+        src="https://i.ibb.co/XfnXPDmZ/5069.png"
+        alt="Telegram"
+        loading="eager"
+        decoding="async">
     </a>
   </div>
 
   <div class="social-copy">© 2026 Your Club</div>
 </footer>
 
-<script type="module">
-
+<script>
 
 for(let i=17;i<=50;i++){
-  document.getElementById("fAge").innerHTML += `<option value="${i}">${i}</option>`;
+  fAge.innerHTML += `<option value="${i}">${i}</option>`;
 }
 
-window.chooseActivity = function(act){
-  if(act === "fillup"){
-    document.getElementById("fillupSection").style.display="block";
-  }
-};
 
-window.submitFillupForm = function(){
-  const name = document.getElementById("fName").value.trim();
-  const age  = document.getElementById("fAge").value;
-  const cpm  = document.getElementById("fCpm").value.trim();
-  const ign  = document.getElementById("fIgn").value.trim();
-  const role = document.getElementById("fRole").value;
-  const reason = document.getElementById("fReason").value.trim();
-  const imageFile = document.getElementById("fImage").files[0];
+function submitFillupForm(){
+  const name = fName.value.trim();
+  const age = fAge.value;
+  const cpm = fCpm.value.trim();
+  const ign = fIgn.value.trim();
+  const role = fRole.value;
+  const reason = fReason.value.trim();
+  const image = fImage.files[0];
 
-  if(!name || !age || !cpm || !ign || !role || !reason || !imageFile){
-    return alert("Please fill all fields and upload an image.");
+  if(!name || !age || !cpm || !ign || !role || !reason || !image){
+    return alert("Please fill all fields.");
   }
 
-  const BOT_TOKEN = "BOT TOKEN";
-  const CHAT_ID   = "CHAT ID";
+  const BOT_TOKEN = "YOUR_BOT_TOKEN";
+  const CHAT_ID = "CHAT ID";
 
-  const caption = `
-📌 New Club Registration
-*Name:* ${name}
-*Age:* ${age}
-*CPM ID:* ${cpm}
-*IGN:* ${ign}
-*Role:* ${role}
-*Club Before & Reason:* ${reason}
-  `;
+  const caption =
+`📌 New Club Registration
+Name: ${name}
+Age: ${age}
+CPM ID: ${cpm}
+IGN: ${ign}
+Role: ${role}
+Reason: ${reason}`;
 
-  const formData = new FormData();
-  formData.append("chat_id", CHAT_ID);
-  formData.append("photo", imageFile);
-  formData.append("caption", caption);
-  formData.append("parse_mode", "Markdown");
+  const fd = new FormData();
+  fd.append("chat_id", CHAT_ID);
+  fd.append("photo", image);
+  fd.append("caption", caption);
 
-  fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method:"POST", body:formData })
-    .then(res => res.json())
-    .then(data => {
-      console.log(data);
-      if(data.ok){
-        alert("Thank you for joining! Please wait for approval.");
-        ["fName","fAge","fCpm","fIgn","fRole","fReason","fImage"].forEach(id => {
-          const el = document.getElementById(id);
-          if(el) el.value = "";
-        });
-      } else {
-        alert("Telegram error: " + data.description);
-      }
-    })
-    .catch(err => {
-      console.error(err);
-      alert("Failed to send. See console for details.");
-    });
-};
-</script>
-
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./service-worker.js");
-  });
+  fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+    method:"POST",
+    body:fd
+  })
+  .then(r=>r.json())
+  .then(d=>{
+    if(d.ok){
+      alert("Submitted successfully!");
+      document.querySelectorAll("input,textarea,select").forEach(e=>e.value="");
+    }else{
+      alert(d.description);
+    }
+  })
+  .catch(()=>alert("Failed to send."));
 }
 </script>
 
-<script type="module" src="welcome.js"></script>
 </body>
 </html>
