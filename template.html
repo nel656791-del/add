@@ -14,7 +14,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
-
 body{
   margin:0;
   font-family:"Poppins",sans-serif;
@@ -43,7 +42,7 @@ button{
 button:hover{ background-position:100% 0; transform:translateY(-2px);}
 button:active{ transform:scale(.97); }
 .menu-btns{ display:flex; justify-content:center; gap:12px; margin-bottom:20px;}
-#welcomeMsg{
+  #welcomeMsg{
   font-family: "Playfair Display", serif;
   font-size: 20px;
   text-align: center;
@@ -56,12 +55,13 @@ button:active{ transform:scale(.97); }
   min-height: 90px;
   transition: opacity .5s ease;
 }
+
 #menuBtns{
   justify-content: center;
   opacity: 0;
   transition: opacity .6s ease;
 }
-.menu-btns, .social-btns {
+  .menu-btns, .social-btns {
   display: flex;
   justify-content: center;
   gap: 16px;
@@ -110,24 +110,20 @@ button:active{ transform:scale(.97); }
   letter-spacing:2px;
   color:#7fdcff;
 }
-#menuBtns{
-  opacity:0;
-  pointer-events:none;
-}
 </style>
 </head>
 
 <body>
 <div class="container">
-<h1>{{CLUB_NAME}}</h1>
+<h1>(YOUR CLUB NAME)</h1>
 <h2 id="welcomeMsg"></h2>
 
-<div class="menu-btns" id="menuBtns">
-  <button type="button" onclick="chooseActivity('fillup')">
-    Fill Up Form
-  </button>
+
+<div class="menu-btns" id="menuBtns" style="display:none;">
+  <button type="button" onclick="chooseActivity('fillup')">Fill Up Form</button>
 </div>
 
+<!-- Fill Up Form Section -->
 <div id="fillupSection" style="display:none;">
   <div style="text-align:center;margin-bottom:12px;">
     <img loading="lazy" src="logo.png" alt="Club Logo" width="120">
@@ -162,21 +158,52 @@ button:active{ transform:scale(.97); }
   <input id="fImage" type="file" accept="image/*">
 
 <button type="button" onclick="submitFillupForm()">Submit</button>
+
+<p style="
+  margin-top:14px;
+  font-size:12px;
+  text-align:center;
+  line-height:1.6;
+  color:#9befff;
+">
+⚠️ <strong>IMPORTANT:</strong><br>
+After submitting, please <b>ADD / PM / DM our ADMIN</b><br>
+so approval will be faster.<br><br>
+
+To avoid hassle finding your account,<br>
+please click the <b>Facebook icon</b> below<br>
+and message our admin directly.
+</p>
 </div>
 </div>
 
 <footer class="social-footer">
   <div class="social-title">CONNECT WITH US</div>
+
   <div class="social-btns">
-    <a href="{{FB_LINK}}" target="_blank"><img src="https://i.ibb.co/gL2cMVSK/5072.png"></a>
-    <a href="{{IG_LINK}}" target="_blank"><img src="https://i.ibb.co/84620cWW/5070.png"></a>
-    <a href="{{TG_LINK}}" target="_blank"><img src="https://i.ibb.co/XfnXPDmZ/5069.png"></a>
-    <a href="{{TT_LINK}}" target="_blank"><img src="https://i.ibb.co/HZyrtC2/5071.png"></a>
+    <a href="https://www.facebook.com/profile.php?id=61577828138380" target="_blank">
+      <img loading="lazy" src="https://i.ibb.co/gL2cMVSK/5072.png" alt="Facebook">
+    </a>
+
+    <a href="https://instagram.com/YOURPAGE" target="_blank">
+      <img loading="lazy" src="https://i.ibb.co/84620cWW/5070.png" alt="Instagram">
+    </a>
+
+    <a href="https://t.me/nelhumble" target="_blank">
+      <img loading="lazy" src="https://i.ibb.co/XfnXPDmZ/5069.png" alt="Telegram">
+    </a>
+
+    <a href="https://tiktok.com/@arnelb11111" target="_blank">
+      <img loading="lazy" src="https://i.ibb.co/HZyrtC2/5071.png" alt="TikTok">
+    </a>
   </div>
+
   <div class="social-copy">© 2026 Your Club</div>
 </footer>
 
 <script type="module">
+
+
 for(let i=17;i<=50;i++){
   document.getElementById("fAge").innerHTML += `<option value="${i}">${i}</option>`;
 }
@@ -188,44 +215,66 @@ window.chooseActivity = function(act){
 };
 
 window.submitFillupForm = function(){
-  const name = fName.value.trim();
-  const age  = fAge.value;
-  const cpm  = fCpm.value.trim();
-  const ign  = fIgn.value.trim();
-  const role = fRole.value;
-  const reason = fReason.value.trim();
-  const imageFile = fImage.files[0];
+  const name = document.getElementById("fName").value.trim();
+  const age  = document.getElementById("fAge").value;
+  const cpm  = document.getElementById("fCpm").value.trim();
+  const ign  = document.getElementById("fIgn").value.trim();
+  const role = document.getElementById("fRole").value;
+  const reason = document.getElementById("fReason").value.trim();
+  const imageFile = document.getElementById("fImage").files[0];
 
   if(!name || !age || !cpm || !ign || !role || !reason || !imageFile){
     return alert("Please fill all fields and upload an image.");
   }
 
-  const BOT_TOKEN = "{{BOT_TOKEN}}";
-  const CHAT_ID   = "{{CHAT_ID}}";
+  const BOT_TOKEN = "BOT TOKEN";
+  const CHAT_ID   = "CHAT ID";
 
-  const caption = \`
+  const caption = `
 📌 New Club Registration
-Name: \${name}
-Age: \${age}
-CPM ID: \${cpm}
-IGN: \${ign}
-Role: \${role}
-Reason: \${reason}
-\`;
+*Name:* ${name}
+*Age:* ${age}
+*CPM ID:* ${cpm}
+*IGN:* ${ign}
+*Role:* ${role}
+*Club Before & Reason:* ${reason}
+  `;
 
   const formData = new FormData();
   formData.append("chat_id", CHAT_ID);
   formData.append("photo", imageFile);
   formData.append("caption", caption);
+  formData.append("parse_mode", "Markdown");
 
-  fetch(\`https://api.telegram.org/bot\${BOT_TOKEN}/sendPhoto\`, {
-    method:"POST",
-    body:formData
-  }).then(()=>alert("Sent"));
+  fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method:"POST", body:formData })
+    .then(res => res.json())
+    .then(data => {
+      console.log(data);
+      if(data.ok){
+        alert("Thank you for joining! Please wait for approval.");
+        ["fName","fAge","fCpm","fIgn","fRole","fReason","fImage"].forEach(id => {
+          const el = document.getElementById(id);
+          if(el) el.value = "";
+        });
+      } else {
+        alert("Telegram error: " + data.description);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Failed to send. See console for details.");
+    });
 };
 </script>
 
-<script src="welcome.js" defer></script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js");
+  });
+}
+</script>
 
+<script type="module" src="welcome.js"></script>
 </body>
 </html>
