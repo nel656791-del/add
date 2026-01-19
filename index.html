@@ -7,66 +7,61 @@
 
 <style>
 body{
-  background:#000;
-  color:#00ff9c;
+  background:#050b18;
+  color:#0ff;
   font-family:monospace;
-  padding:16px;
+  padding:20px;
 }
-input,textarea,button{
+input,button,textarea{
   width:100%;
   padding:10px;
   margin-bottom:10px;
   background:#000;
-  color:#00ff9c;
-  border:1px solid #00ff9c;
+  color:#0ff;
+  border:1px solid #0ff;
 }
-textarea{height:420px;}
-button{cursor:pointer;}
+textarea{height:280px;}
 </style>
 </head>
 
 <body>
 
-<h2>HTML Form Generator</h2>
+<h2>Club Form Generator</h2>
 
-<input id="club" placeholder="Club Name">
-<input id="bot" placeholder="Telegram Bot Token">
-<input id="chat" placeholder="Telegram Chat ID">
+<input id="club" placeholder="CLUB NAME">
 <input id="fb" placeholder="Facebook Link">
 <input id="ig" placeholder="Instagram Link">
 <input id="tg" placeholder="Telegram Link">
 <input id="tt" placeholder="TikTok Link">
 
+<input id="bot" placeholder="Telegram BOT TOKEN">
+<input id="chat" placeholder="Telegram CHAT ID">
+
 <button onclick="generate()">GENERATE</button>
 
-<textarea id="out" placeholder="Generated HTML here..."></textarea>
+<textarea id="output"></textarea>
 
-<button onclick="copyText()">COPY</button>
+<button onclick="copy()">COPY</button>
 
 <script>
-let TEMPLATE = "";
+async function generate(){
+  const res = await fetch("template.html");
+  let tpl = await res.text();
 
-fetch("template.html")
-  .then(res => res.text())
-  .then(txt => TEMPLATE = txt);
+  tpl = tpl
+    .replaceAll("{{CLUB_NAME}}", club.value)
+    .replaceAll("{{FB_LINK}}", fb.value)
+    .replaceAll("{{IG_LINK}}", ig.value)
+    .replaceAll("{{TG_LINK}}", tg.value)
+    .replaceAll("{{TT_LINK}}", tt.value)
+    .replaceAll("{{BOT_TOKEN}}", bot.value)
+    .replaceAll("{{CHAT_ID}}", chat.value);
 
-function generate(){
-  if(!TEMPLATE){ alert("Template not loaded"); return; }
-
-  let html = TEMPLATE
-    .replace(/{{CLUB_NAME}}/g, club.value || "YOUR CLUB")
-    .replace(/{{BOT_TOKEN}}/g, bot.value || "BOT_TOKEN")
-    .replace(/{{CHAT_ID}}/g, chat.value || "CHAT_ID")
-    .replace(/{{FB}}/g, fb.value || "#")
-    .replace(/{{IG}}/g, ig.value || "#")
-    .replace(/{{TG}}/g, tg.value || "#")
-    .replace(/{{TT}}/g, tt.value || "#");
-
-  out.value = html;
+  output.value = tpl;
 }
 
-function copyText(){
-  out.select();
+function copy(){
+  output.select();
   document.execCommand("copy");
   alert("COPIED");
 }
