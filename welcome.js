@@ -1,43 +1,36 @@
-(function () {
-  function initWelcome() {
-    const displayEl = document.getElementById("welcomeMsg");
-    const menuBtns  = document.getElementById("menuBtns");
+document.addEventListener("DOMContentLoaded", () => {
+  const welcomeText = "Welcome to YOUR CLUB. Please complete the registration form below to apply for membership..";
+  const displayEl = document.getElementById("welcomeMsg");
+  const menuBtns = document.getElementById("menuBtns");
 
-    if (!displayEl || !menuBtns) {
-      setTimeout(initWelcome, 50); 
-      return;
-    }
-
-    const welcomeText =
-      "Welcome to YOUR CLUB. Please complete the registration form below to apply for membership.";
-
-    let i = 0;
-    displayEl.innerHTML = "";
-
-    function typeWriter() {
-      if (i < welcomeText.length) {
-        displayEl.innerHTML += welcomeText.charAt(i);
-        i++;
-
-        let delay = 25;
-        const c = welcomeText.charAt(i - 1);
-        if (c === "," || c === ".") delay = 150;
-
-        setTimeout(typeWriter, delay);
-      } else {
-        menuBtns.style.opacity = "1";
-        menuBtns.style.pointerEvents = "auto";
-        menuBtns.style.transition = "opacity 0.8s ease";
-      }
-    }
-
-    typeWriter();
+  if (!displayEl || !menuBtns) {
+    console.error("Missing #welcomeMsg or #menuBtns");
+    return;
   }
 
-  
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initWelcome);
-  } else {
-    initWelcome();
+  menuBtns.style.display = "flex"; 
+  menuBtns.style.opacity = 0;      
+
+  let charIndex = 0;
+
+  function typeWriter() {
+    if (charIndex < welcomeText.length) {
+      displayEl.innerHTML += welcomeText.charAt(charIndex);
+      charIndex++;
+
+      
+      let delay = 25;
+      const char = welcomeText.charAt(charIndex - 1);
+      if (char === "," || char === ".") delay = 150;
+
+      setTimeout(typeWriter, delay);
+    } else {
+   
+      menuBtns.style.transition = "opacity 0.8s ease";
+      menuBtns.style.opacity = 1;
+    }
   }
-})();
+
+  displayEl.innerHTML = "";
+  typeWriter();
+});
