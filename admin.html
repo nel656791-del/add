@@ -6,170 +6,194 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+:root{
+  --bg:#050814;
+  --card:#0d1226;
+  --border:#1f2a4a;
+  --text:#eaffff;
+  --muted:#7faaff;
+  --accent:#00eaff;
+  --danger:#ff5c7a;
+  --success:#38d39f;
+}
+*{box-sizing:border-box}
+
 body{
   margin:0;
   font-family:system-ui,Segoe UI,Roboto;
-  background:radial-gradient(circle at top,#111,#000);
-  color:#eaffff;
+  background:radial-gradient(circle at top,#0b1a2f,#000);
+  color:var(--text);
   min-height:100vh;
   display:flex;
   justify-content:center;
   align-items:center;
+  padding:20px;
 }
+
 .panel{
-  width:380px;
-  background:rgba(10,10,20,.9);
-  border:1px solid #00eaff55;
+  width:420px;
+  background:var(--card);
+  border:1px solid var(--border);
   border-radius:18px;
   padding:26px;
-  box-shadow:0 0 40px #00eaff22;
+  box-shadow:0 0 40px rgba(0,234,255,.15);
 }
+
 h2{
   text-align:center;
   letter-spacing:3px;
-  margin-bottom:20px;
+  margin-top:0;
 }
+
 .section{
-  margin-bottom:20px;
+  margin-top:22px;
 }
+
 label{
   font-size:12px;
-  opacity:.8;
+  color:var(--muted);
 }
-input{
+
+input,button{
   width:100%;
-  margin-top:6px;
-  padding:10px;
-  border-radius:12px;
-  border:1px solid #00eaff33;
-  background:#050b18;
-  color:#eaffff;
-}
-.toggle{
-  padding:18px;
+  padding:12px;
   border-radius:14px;
-  background:#050b18;
+  border:1px solid var(--border);
+  background:#060b1d;
+  color:var(--text);
+  margin-top:8px;
+  font-size:14px;
+}
+
+button{
+  cursor:pointer;
+  font-weight:700;
+  letter-spacing:2px;
+}
+
+.add{background:var(--accent);color:#000}
+.del{background:var(--danger);color:#000}
+.on{background:var(--success);color:#000}
+.off{background:var(--danger);color:#000}
+
+.key-list{
+  margin-top:10px;
+  font-size:13px;
+}
+
+.key-item{
   display:flex;
   justify-content:space-between;
   align-items:center;
+  padding:8px 10px;
+  border-bottom:1px solid var(--border);
 }
-button{
-  padding:8px 14px;
-  border-radius:18px;
-  border:none;
-  cursor:pointer;
-  font-weight:700;
-  letter-spacing:1px;
-}
-.on{background:#38d39f;color:#000}
-.off{background:#ff5c7a;color:#000}
-.add{background:#6ea8ff;color:#000;margin-top:10px}
-.keylist{
-  background:#050b18;
-  border-radius:12px;
-  padding:10px;
-  font-size:12px;
-  max-height:140px;
-  overflow:auto;
-}
-.keyitem{
-  display:flex;
-  justify-content:space-between;
-  margin-bottom:6px;
-}
-.keyitem button{
-  background:#ff5c7a;
-  color:#000;
-  font-size:10px;
-}
+
 footer{
   text-align:center;
   font-size:11px;
   opacity:.6;
-  margin-top:14px;
+  margin-top:22px;
 }
 </style>
 </head>
 
 <body>
 <div class="panel">
+
   <h2>CRISFORM ADMIN</h2>
 
   <!-- SITE TOGGLE -->
-  <div class="section toggle">
-    <span>Site Status</span>
-    <button id="toggleBtn"></button>
+  <div class="section">
+    <label>Site Status</label>
+    <button id="siteBtn"></button>
   </div>
 
   <!-- ADD KEY -->
   <div class="section">
     <label>Add Access Key</label>
-    <input id="newKey" placeholder="e.g. CLUB-2026">
+    <input id="newKey" placeholder="e.g. CLUB-1234">
     <button class="add" onclick="addKey()">ADD KEY</button>
   </div>
 
   <!-- KEY LIST -->
   <div class="section">
     <label>Active Keys</label>
-    <div class="keylist" id="keyList"></div>
+    <div id="keys" class="key-list"></div>
   </div>
 
   <footer>© CrisForm Panel</footer>
 </div>
 
 <script>
+const siteBtn = document.getElementById("siteBtn");
+const keysBox = document.getElementById("keys");
 
-const btn = document.getElementById("toggleBtn");
+function getKeys(){
+  return JSON.parse(localStorage.getItem("ADMIN_KEYS") || "[]");
+}
 
-function renderToggle(){
+function saveKeys(keys){
+  localStorage.setItem("ADMIN_KEYS", JSON.stringify(keys));
+}
+
+function renderSite(){
   const state = localStorage.getItem("SITE_STATUS") || "on";
   if(state==="on"){
-    btn.textContent="ONLINE";
-    btn.className="on";
+    siteBtn.textContent="ONLINE";
+    siteBtn.className="on";
   }else{
-    btn.textContent="OFFLINE";
-    btn.className="off";
+    siteBtn.textContent="OFFLINE";
+    siteBtn.className="off";
   }
 }
-btn.onclick = ()=>{
-  const cur = localStorage.getItem("SITE_STATUS") || "on";
-  localStorage.setItem("SITE_STATUS", cur==="on"?"off":"on");
-  renderToggle();
+
+siteBtn.onclick = ()=>{
+  const state = localStorage.getItem("SITE_STATUS") || "on";
+  localStorage.setItem("SITE_STATUS", state==="on"?"off":"on");
+  renderSite();
 };
 
-
-let keys = JSON.parse(localStorage.getItem("ADMIN_KEYS") || "[]");
-
-function saveKeys(){
-  localStorage.setItem("ADMIN_KEYS", JSON.stringify(keys));
-  renderKeys();
-}
-
-function addKey(){
-  const k = newKey.value.trim();
-  if(!k || keys.includes(k)) return;
-  keys.push(k);
-  saveKeys();
-  newKey.value="";
-}
-
-function removeKey(k){
-  keys = keys.filter(x => x !== k);
-  saveKeys();
-}
-
 function renderKeys(){
-  keyList.innerHTML = "";
+  const keys = getKeys();
+  keysBox.innerHTML = "";
+  if(keys.length===0){
+    keysBox.innerHTML="<div style='opacity:.5'>No keys</div>";
+    return;
+  }
   keys.forEach(k=>{
     const div = document.createElement("div");
-    div.className="keyitem";
-    div.innerHTML = `<span>${k}</span>
-      <button onclick="removeKey('${k}')">X</button>`;
-    keyList.appendChild(div);
+    div.className="key-item";
+    div.innerHTML=`
+      <span>${k}</span>
+      <button class="del" onclick="removeKey('${k}')">X</button>
+    `;
+    keysBox.appendChild(div);
   });
 }
 
-renderToggle();
+function addKey(){
+  const input = document.getElementById("newKey");
+  const key = input.value.trim();
+  if(!key) return;
+
+  let keys = getKeys();
+  if(keys.includes(key)) return alert("Key already exists.");
+
+  keys.push(key);
+  saveKeys(keys);
+  input.value="";
+  renderKeys();
+}
+
+function removeKey(key){
+  let keys = getKeys().filter(k=>k!==key);
+  saveKeys(keys);
+  localStorage.removeItem("EXPIRE_"+key);
+  renderKeys();
+}
+
+renderSite();
 renderKeys();
 </script>
 </body>
